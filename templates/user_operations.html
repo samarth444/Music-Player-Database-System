@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User Operations</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        /* Basic Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-image: url('/static/bgimg3.jpg'); /* Path to your background image */
+            background-size: cover;
+            background-position: center;
+            background-repeat: repeat;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #333;
+        }
+
+        /* Main Container */
+        .container {
+            width: 90%;
+            max-width: 800px;
+            background-color: rgba(48, 46, 46, 0.9);
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            color: #fff;
+            text-align: center;
+        }
+
+        h1, h3 {
+            color: #4CAF50;
+            margin-bottom: 20px;
+        }
+
+        form {
+            margin-bottom: 20px;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+
+        button {
+            padding: 12px 20px;
+            background-color: #4CAF50;
+            color: white;
+            font-size: 1em;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .button-group {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+        }
+
+        .button-group button {
+            flex: 1;
+            margin: 0 5px;
+        }
+
+        #artistResults, #songResults, #sortResults, #avgRatingResult, #mostPopularSongResult, #songListResults {
+            margin-top: 20px;
+            text-align: left;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            padding: 5px 0;
+        }
+
+        a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Mobile Responsiveness */
+        @media (max-width: 600px) {
+            .button-group {
+                flex-direction: column;
+            }
+
+            .button-group button {
+                margin: 5px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>User Dashboard</h1>
+        
+        <!-- Search by Artist Name -->
+        <h3>View Songs</h3>
+        <div class="button-group">
+            <button id="allSongsBtn">All Songs</button>
+            <button id="albumSongsBtn">Album Songs</button>
+            <button id="playlistSongsBtn">Playlist Songs</button>
+        </div>
+        <div id="songListResults"></div>
+
+        <h3>Search by Artist</h3>
+        <form id="artistSearchForm">
+            <input type="text" name="artist_name" placeholder="Enter artist name" required>
+            <button type="submit">Search</button>
+        </form>
+        <div id="artistResults"></div>
+
+        <!-- Search by Song Name -->
+        <h3>Search by Song</h3>
+        <form id="songSearchForm">
+            <input type="text" name="song_name" placeholder="Enter song name" required>
+            <button type="submit">Search</button>
+        </form>
+        <div id="songResults"></div>
+
+        <!-- Sort Artists -->
+        <h3>Sort Artists</h3>
+        <div class="button-group">
+            <button id="sortArtistsAsc">Sort Artists Ascending</button>
+            <button id="sortArtistsDesc">Sort Artists Descending</button>
+        </div>
+        <div id="sortResults"></div>
+
+        <!-- Get Average Rating of Artist's Songs -->
+        <h3>Get Artist's Average Song Rating</h3>
+        <form id="artistAvgRatingForm">
+            <input type="text" name="artist_name" placeholder="Enter artist name" required>
+            <button type="submit">Get Average Rating</button>
+        </form>
+        <div id="avgRatingResult"></div>
+
+        <!-- Get Most Popular Song -->
+        <h3>Get Most Popular Song</h3>
+        <button id="getMostPopularSongBtn">Get Most Popular Song</button>
+        <div id="mostPopularSongResult"></div>
+
+        <!-- View Songs -->
+        
+
+        <!-- Log Out Link -->
+        <br><a href="{{ url_for('logout2') }}">Log Out</a>
+    </div>
+
+    <script>
+         // Artist Search
+         $('#artistSearchForm').submit(function(event) { 
+            event.preventDefault();
+            $.post('/search_artist', $(this).serialize(), function(response) {
+                let html = "<h4>Results:</h4><ul>";
+                response.forEach(item => {
+                    html += `<li>Album: ${item.album_name}, Song: ${item.song_name}, Rating: ${item.ratings}`;
+                    if (item.audio_url) {
+                        html += `, <a href="${item.audio_url}" target="_blank">Listen</a>`;
+                    }
+                    html += `</li>`;
+                });
+                html += "</ul>";
+                $('#artistResults').html(html);
+            });
+        });
+
+        // Song Search
+        $('#songSearchForm').submit(function(event) { 
+            event.preventDefault();
+            $.post('/search_song', $(this).serialize(), function(response) {
+                let html = "<h4>Results:</h4><ul>";
+                response.forEach(item => {
+                    html += `<li>Song: ${item.song_name}, Artist: ${item.artist_name}, Rating: ${item.ratings}`;
+                    if (item.audio_url) {
+                        html += `, <a href="${item.audio_url}" target="_blank">Listen</a>`;
+                    }
+                    html += `</li>`;
+                });
+                html += "</ul>";
+                $('#songResults').html(html);
+            });
+        });
+
+        // Sort Artists
+        $('#sortArtistsAsc').click(function() {
+            $.get('/sort_artists_ascending', function(response) {
+                let html = "<h4>Artists in Ascending Order:</h4><ul>";
+                response.forEach(item => { html += `<li>${item.name}</li>`; });
+                html += "</ul>";
+                $('#sortResults').html(html);
+            });
+        });
+
+        $('#sortArtistsDesc').click(function() {
+            $.get('/sort_artists_descending', function(response) {
+                let html = "<h4>Artists in Descending Order:</h4><ul>";
+                response.forEach(item => { html += `<li>${item.name}</li>`; });
+                html += "</ul>";
+                $('#sortResults').html(html);
+            });
+        });
+
+        // Artist Avg Rating
+        $('#artistAvgRatingForm').submit(function(event) {
+            event.preventDefault();
+            $.post('/artist_avg_rating', $(this).serialize(), function(response) {
+                let html = `<h4>Average Rating: ${response.average_rating}</h4>`;
+                if (response.songs.length > 0) {
+                    html += "<h5>Songs:</h5><ul>";
+                    response.songs.forEach(song => {
+                        html += `<li>Song: ${song.name}`;
+                        if (song.audio_url) {
+                            html += ` - <a href="${song.audio_url}" target="_blank">Listen</a>`;
+                        }
+                        html += `</li>`;
+                    });
+                    html += "</ul>";
+                } else {
+                    html += "<p>No songs found for artist.</p>";
+                }
+                $('#avgRatingResult').html(html);
+            });
+        });
+
+        // Get Most Popular Song
+        $('#getMostPopularSongBtn').click(function() {
+            $.get('/most_popular_song', function(response) {
+                if (response.song_name) {
+                    let html = `<h4>The most popular song is '${response.song_name}' with an average rating of ${response.avg_rating}.</h4>`;
+                    if (response.audio_url) {
+                        html += `<p><a href="${response.audio_url}" target="_blank">Listen to the song</a></p>`;
+                    }
+                    $('#mostPopularSongResult').html(html);
+                } else {
+                    $('#mostPopularSongResult').html(`<h4>${response.message}</h4>`);
+                }
+            }).fail(function() {
+                $('#mostPopularSongResult').html('<h4>Error retrieving data.</h4>');
+            });
+        });
+
+
+ // Fetch and display all songs
+ $('#allSongsBtn').click(function() {
+        $.get('/all_songs', function(response) {
+            let html = "<h4>All Songs:</h4><ul>";
+            response.forEach(song => {
+                html += `<li>${song.song_name}`;
+                if (song.audio_url) {
+                    html += ` - <a href="${song.audio_url}" target="_blank">Listen</a>`;
+                }
+                html += `</li>`;
+            });
+            html += "</ul>";
+            $('#songListResults').html(html);
+        });
+    });
+
+    // Fetch and display album songs
+    $('#albumSongsBtn').click(function() {
+        $.get('/album_songs', function(response) {
+            let html = "<h4>Album Songs:</h4><ul>";
+            response.forEach(album => {
+                html += `<li>Album: ${album.album_name}<ul>`;
+                album.songs.forEach(song => {
+                    html += `<li>${song.song_name}`;
+                    if (song.audio_url) {
+                        html += ` - <a href="${song.audio_url}" target="_blank">Listen</a>`;
+                    }
+                    html += `</li>`;
+                });
+                html += "</ul></li>";
+            });
+            html += "</ul>";
+            $('#songListResults').html(html);
+        });
+    });
+
+    // Fetch and display playlist songs
+    $('#playlistSongsBtn').click(function() {
+        $.get('/playlist_songs', function(response) {
+            let html = "<h4>Playlist Songs:</h4><ul>";
+            response.forEach(playlist => {
+                html += `<li>Playlist: ${playlist.playlist_name}<ul>`;
+                playlist.songs.forEach(song => {
+                    html += `<li>${song.song_name}`;
+                    if (song.audio_url) {
+                        html += ` - <a href="${song.audio_url}" target="_blank">Listen</a>`;
+                    }
+                    html += `</li>`;
+                });
+                html += "</ul></li>" ;
+            });
+            html += "</ul>";
+            $('#songListResults').html(html);
+        });
+    });
+
+
+    </script>
+</body>
+</html>
+

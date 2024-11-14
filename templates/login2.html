@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>User Login</title>
+    <style>
+        /* Basic Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-image: url('/static/bgimg3.jpg'); /* Path to your background image */
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            color: #fff; /* Text color for better contrast */
+        }
+
+        .login-container {
+            background-color: rgba(79, 75, 75, 0.8); /* Slight opacity for better readability */
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .login-container h2 {
+            margin-bottom: 1.5em;
+            font-size: 2em;
+            font-weight: bold;
+            color: #4CAF50;
+        }
+
+        .login-container label {
+            display: block;
+            margin-bottom: 8px;
+            text-align: left;
+            font-size: 1.1em;
+        }
+
+        .login-container input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+
+        .login-container input:focus {
+            border-color: #4CAF50;
+            outline: none;
+        }
+
+        .login-container button {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            background-color: #5cb85c;
+            color: white;
+            font-size: 1.1em;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .login-container button:hover {
+            background-color: #4cae4c;
+        }
+
+        .flash {
+            color: red;
+            margin-top: 1em;
+        }
+
+        .home-btn {
+            background-color: #007bff;
+            margin-top: 20px;
+            padding: 12px;
+            border: none;
+            color: white;
+            font-size: 1.1em;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .home-btn:hover {
+            background-color: #0056b3;
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .login-container {
+                width: 90%;
+                padding: 20px;
+            }
+
+            .login-container h2 {
+                font-size: 1.8em;
+            }
+
+            .login-container input,
+            .login-container button {
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h2>User Login</h2>
+        <form action="{{ url_for('login2') }}" method="POST">
+            <label>Username:</label>
+            <input type="text" name="username" required>
+            <label>Password:</label>
+            <input type="password" name="password" required>
+            <button type="submit">Login</button>
+        </form>
+        
+        <!-- Back to Home button -->
+        <a href="{{ url_for('index') }}">
+            <button type="button" class="home-btn">Back to Home</button>
+        </a>
+    </div>
+</body>
+</html>

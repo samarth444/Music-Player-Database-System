@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Update Data</title>
+    <style>
+        /* Basic Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-image: url('/static/bgimg3.jpg'); /* Path to your background image */
+            background-size: cover;
+            background-position: center;
+            background-repeat: repeat;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            height: 100vh;
+            margin: 0;
+            color: #ECECEC;
+        }
+
+        .container {
+            background-color: rgba(30, 30, 30, 0.9); /* Darker background for better contrast */
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 800px;
+            margin-top: 50px;
+        }
+
+        h2 {
+            color: #6DFFB2; /* Light green color for main headings */
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        h3 {
+            color: #FFD700; /* Golden yellow for subheadings */
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+
+        form {
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        input[type="number"],
+        input[type="text"],
+        select {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #555;
+            border-radius: 5px;
+            background-color: #2C2C2C;
+            color: #ECECEC;
+        }
+
+        button {
+            padding: 12px 20px;
+            background-color: #4CAF50;
+            color: white;
+            font-size: 1.1em;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        a {
+            display: inline-block;
+            margin-top: 20px;
+            font-size: 1.1em;
+            color: #87CEEB;
+            text-decoration: none;
+            text-align: center;
+            transition: color 0.3s ease;
+        }
+
+        a:hover {
+            color: #ADD8E6; /* Slightly lighter blue on hover */
+            text-decoration: underline;
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .container {
+                width: 95%;
+                padding: 20px;
+            }
+
+            h2, h3 {
+                font-size: 1.5em;
+            }
+
+            button {
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Update Data in Tables</h2>
+
+        <!-- Update User -->
+        <h3>Update User</h3>
+        <form action="{{ url_for('update_user') }}" method="post">
+            <input type="number" name="user_id" placeholder="User ID" required>
+            <input type="text" name="column" placeholder="Column to update (username, phone_number, etc.)" required>
+            <input type="text" name="new_value" placeholder="New Value" required>
+            <button type="submit">Update User</button>
+        </form>
+
+        <!-- Update Artist -->
+        <h3>Update Artist</h3>
+        <form action="{{ url_for('update_artist') }}" method="post">
+            <input type="number" name="artist_id" placeholder="Artist ID" required>
+            <input type="text" name="column" placeholder="Column to update (name, style)" required>
+            <input type="text" name="new_value" placeholder="New Value" required>
+            <button type="submit">Update Artist</button>
+        </form>
+
+        <!-- Update Album -->
+        <h3>Update Album</h3>
+        <form action="{{ url_for('update_album') }}" method="post">
+            <input type="number" name="album_id" placeholder="Album ID" required>
+            <input type="text" name="column" placeholder="Column to update (name, genre, etc.)" required>
+            <input type="text" name="new_value" placeholder="New Value" required>
+            <button type="submit">Update Album</button>
+        </form>
+
+        <!-- Update Song -->
+        <h3>Update Song</h3>
+        <form action="{{ url_for('update_song') }}" method="post">
+            <input type="number" name="song_id" placeholder="Song ID" required>
+            <select name="column" required>
+                <option value="" disabled selected>Select field to update</option>
+                <option value="name">Song Name</option>
+                <option value="ratings">Ratings</option>
+                <option value="year_of_release">Year of Release</option>
+                <option value="album_id">Album ID</option>
+                <option value="tags">Tags</option>
+                <option value="audio_url">Audio URL</option>
+            </select>
+            <input type="text" name="new_value" placeholder="New Value" required>
+            <button type="submit">Update Song</button>
+        </form>
+
+        <!-- Update Playlist -->
+        <h3>Update Playlist</h3>
+        <form action="{{ url_for('update_playlist') }}" method="post">
+            <input type="number" name="playlist_id" placeholder="Playlist ID" required>
+            <input type="text" name="column" placeholder="Column to update (name, tags, etc.)" required>
+            <input type="text" name="new_value" placeholder="New Value" required>
+            <button type="submit">Update Playlist</button>
+        </form>
+
+        <!-- Update Playlist-Song Relationship -->
+        <h3>Update Playlist-Song Relationship</h3>
+        <form action="{{ url_for('update_playlist_song') }}" method="post">
+            <input type="number" name="playlist_id" placeholder="Current Playlist ID" required>
+            <input type="number" name="song_id" placeholder="Song ID" required>
+            <input type="number" name="new_playlist_id" placeholder="New Playlist ID" required>
+            <button type="submit">Update Playlist-Song Relationship</button>
+        </form>
+
+        <br><a href="{{ url_for('admin_operations') }}">Back</a>
+        <br><a href="{{ url_for('logout') }}">Log Out</a>
+    </div>
+</body>
+</html>

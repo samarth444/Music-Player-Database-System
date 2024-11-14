@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Insertion Operations</title>
+    <style>
+        /* Basic Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-image: url('/static/bgimg3.jpg'); /* Path to your background image */
+            background-size: cover;
+            background-position: center;
+            background-repeat: repeat;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            height: 100vh;
+            margin: 0;
+            color: #ECECEC; /* Light color for text against dark background */
+        }
+
+        .container {
+            background-color: rgba(30, 30, 30, 0.9); /* Dark background for the container */
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 800px;
+            margin-top: 50px;
+        }
+
+        h2 {
+            color: #6DFFB2; /* Light green for main headings */
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        h3 {
+            color: #FFD700; /* Golden yellow for subheadings */
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+
+        form {
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        input[type="number"],
+        input[type="text"],
+        input[type="date"],
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #555;
+            border-radius: 5px;
+            background-color: #2C2C2C;
+            color: #ECECEC;
+        }
+
+        button {
+            padding: 12px 20px;
+            background-color: #4CAF50; /* Green button */
+            color: white;
+            font-size: 1.1em;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #45a049; /* Darker green on hover */
+        }
+
+        a {
+            display: inline-block;
+            margin-top: 20px;
+            font-size: 1.1em;
+            color: #87CEEB; /* Light blue for links */
+            text-decoration: none;
+            text-align: center;
+            transition: color 0.3s ease;
+        }
+
+        a:hover {
+            color: #ADD8E6; /* Slightly lighter blue on hover */
+            text-decoration: underline;
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .container {
+                width: 95%;
+                padding: 20px;
+            }
+
+            h2, h3 {
+                font-size: 1.5em;
+            }
+
+            button {
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Insert Data into Tables</h2>
+
+        <!-- Insert into Artist -->
+        <h3>Insert Artist</h3>
+        <form action="{{ url_for('insert_artist') }}" method="post">
+            <input type="number" name="artist_id" placeholder="Artist ID" required>
+            <input type="text" name="name" placeholder="Artist Name" required>
+            <input type="text" name="style" placeholder="Artist Style" required>
+            <button type="submit">Insert Artist</button>
+        </form>
+
+        <!-- Insert into Album -->
+        <h3>Insert Album</h3>
+        <form action="{{ url_for('insert_album') }}" method="post">
+            <input type="number" name="album_id" placeholder="Album ID" required>
+            <input type="text" name="name" placeholder="Album Name" required>
+            <input type="text" name="genre" placeholder="Genre" required>
+            <input type="number" name="year" placeholder="Release Year" required>
+            <input type="number" name="artist_id" placeholder="Artist ID" required>
+            <button type="submit">Insert Album</button>
+        </form>
+
+        <!-- Insert into Song -->
+        <h3>Insert Song</h3>
+        <form action="{{ url_for('insert_song') }}" method="post">
+            <input type="number" name="song_id" placeholder="Song ID" required>
+            <input type="text" name="name" placeholder="Song Name" required>
+            <input type="number" step="0.1" name="ratings" placeholder="Ratings (0.0 - 10.0)" required>
+            <input type="number" name="year_of_release" placeholder="Year of Release" required>
+            <input type="number" name="album_id" placeholder="Album ID" required>
+            <input type="text" name="tags" placeholder="Tags (comma-separated)" required>
+            <input type="text" name="audio_url" placeholder="Audio File URL or YouTube Link">
+            <button type="submit">Insert Song</button>
+        </form>
+
+        <!-- Insert into Playlist -->
+        <h3>Insert Playlist</h3>
+        <form action="{{ url_for('insert_playlist') }}" method="post">
+            <input type="number" name="playlist_id" placeholder="Playlist ID" required>
+            <input type="text" name="name" placeholder="Playlist Name" required>
+            <input type="text" name="tags" placeholder="Tags (comma-separated)" required>
+            <input type="number" name="user_id" placeholder="User ID" required>
+            <input type="number" name="artist_id" placeholder="Artist ID (optional)">
+            <button type="submit">Insert Playlist</button>
+        </form>
+
+        <!-- Insert into Playlist_Song -->
+        <h3>Insert Playlist Song</h3>
+        <form action="{{ url_for('insert_playlist_song') }}" method="post">
+            <input type="number" name="playlist_id" placeholder="Playlist ID" required>
+            <input type="number" name="song_id" placeholder="Song ID" required>
+            <button type="submit">Insert Playlist Song</button>
+        </form>
+
+        <br><a href="{{ url_for('admin_operations') }}">Back</a>
+        <br><a href="{{ url_for('logout') }}">Log Out</a>
+    </div>
+</body>
+</html>
